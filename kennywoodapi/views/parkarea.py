@@ -27,17 +27,17 @@ class ParkAreas(ViewSet):
 
     def create(self, request):
         """Handle POST operations
-        
+
         Returns:
             Response -- JSON serialized ParkArea instance
         """
 
-        newArea = ParkArea()
-        newArea.name = request.data["name"]
-        newArea.theme = request.data["theme"]
-        newArea.save()
+        new_area = ParkArea()
+        new_area.name = request.data["name"]
+        new_area.theme = request.data["theme"]
+        new_area.save()
 
-        serializer = ParkAreaSerializer(newArea, context={'request': request})
+        serializer = ParkAreaSerializer(new_area, context={'request': request})
 
         return Response(serializer.data)
 
@@ -78,11 +78,13 @@ class ParkAreas(ViewSet):
             area.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
+
         except ParkArea.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+            
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            
+
     def list(self, request):
         """Handle GET requests to park areas resource
 
