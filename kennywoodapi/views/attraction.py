@@ -15,17 +15,21 @@ class AttractionSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'url', 'name', 'area')
+        depth = 1
+
 
 class Attractions(ViewSet):
 
-    def create(self,request):
+    def create(self, request):
 
-        newAttraction = Attraction()
-        newAttraction.name = request.data["name"]
-        newAttraction.area = request.data["area"]
-        newAttraction.save()
+        new_attraction = Attraction()
+        new_attraction.name = request.data["name"]
+        park_area = ParkArea.objects.get(pk=request.data['area_id'])
+        new_attraction.area = park_area
+        new_attraction.save()
 
-        serializer = AttractionSerializer(newAttraction, context={'request': request})
+        serializer = AttractionSerializer(
+            new_attraction, context={'request': request})
 
         return Response(serializer.data)
 
@@ -33,7 +37,8 @@ class Attractions(ViewSet):
 
         try:
             attraction = Attraction.objects.get(pk=pk)
-            serializer = AttractionSerializer(attraction, context={'request': request})
+            serializer = AttractionSerializer(
+                attraction, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
@@ -42,16 +47,17 @@ class Attractions(ViewSet):
 
         attraction = Attraction.objects.get(pk=pk)
         attraction.name = request.data["name"]
-        attraction.area = request.data["area"]
-        area.save()
+        park_area = ParkArea.objects.get(pk=request.data['area_id'])
+        attraction.area = park_area
+        attraction.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, pk=None):
 
         try:
-            area = Attraction.objects.get(pk=pk)
-            area.delete()
+            attraction = Attraction.objects.get(pk=pk)
+            attraction.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 

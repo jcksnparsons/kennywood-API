@@ -32,12 +32,12 @@ class ParkAreas(ViewSet):
             Response -- JSON serialized ParkArea instance
         """
 
-        newArea = ParkArea()
-        newArea.name = request.data["name"]
-        newArea.theme = request.data["theme"]
-        newArea.save()
+        new_area = ParkArea()
+        new_area.name = request.data["name"]
+        new_area.theme = request.data["theme"]
+        new_area.save()
 
-        serializer = ParkAreaSerializer(newArea, context={'request': request})
+        serializer = ParkAreaSerializer(new_area, context={'request': request})
 
         return Response(serializer.data)
 

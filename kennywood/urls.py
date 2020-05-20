@@ -23,6 +23,7 @@ from kennywoodapi.views import *
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'parkareas', ParkAreas, 'parkarea')
 router.register(r'attractions', Attractions, 'attraction')
+router.register(r'itineraries', Itineraries, 'itinerary')
 
 urlpatterns = [
     path('', include(router.urls)),
